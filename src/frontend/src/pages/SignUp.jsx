@@ -16,7 +16,7 @@ const SignUp = () => {
 
   const fetchUsernames = async () => {
     try {
-      const response = await axios.get("http://localhost:5001/users/usernames");
+      const response = await axios.get("/api/users/usernames");
       setUsernames(response.data.usernames);
     } catch (error) {
       console.error("Error fetching usernames: ", error);
@@ -52,7 +52,7 @@ const SignUp = () => {
 
     try {
       await axios.post(
-        "http://localhost:5001/users",
+        "/api/users",
         formData
       );
       fetchUsernames();
