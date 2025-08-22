@@ -1,45 +1,38 @@
 import express from "express";
 import dotenv from "dotenv";
-import pool from "./backend/db/db.js";
-import exerciseRoutes from "./backend/routes/exerciseRoutes.js";
-import userRoutes from "./backend/routes/userRoutes.js";
-import workoutRoutes from "./backend/routes/workoutRoutes.js";
-import cors from "cors";
+import pool from "./db/db.js";
+import exerciseRoutes from "./routes/exerciseRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import workoutRoutes from "./routes/workoutRoutes.js";
 import { Server } from "socket.io";
 import { createServer } from "http";
-import { getByUsernameService } from "./backend/services/userServices.js";
+import { getByUsernameService } from "./services/userServices.js";
+import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
-dotenv.config();
+const __dirname = dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: join(__dirname,  '.env') });
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:5173",
-  },
-});
+const io = new Server(server, { path: "/socket.io" });
 
 // Online Users
 const users = new Map();
 
 // Middleware
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173" }));
 
 // Routes
 app.use("/exercises", exerciseRoutes);
 app.use("/users", userRoutes);
 app.use("/workouts", workoutRoutes);
 
-// Testing POSTGRES Connection
-app.get("/", async (req, res) => {
-  const result = await pool.query("SELECT current_database()");
-  res.send(`The database name is: ${result.rows[0].current_database}`);
-});
-
 // Start Combined Server
+io.engine.on("connection", () => console.log("ENGINE open"));
+
 io.on("connection", (socket) => {
+  console.log("CONNECTION", socket.id);
   socket.on("user:login", (username) => {
     console.log(`User ${username} is now online with socket ID ${socket.id}`);
     users.set(username, socket.id);
@@ -128,8 +121,9 @@ io.on("connection", (socket) => {
 });
 
 const port = process.env.PORT || 3001;
+console.log("loaded port: ", process.env.PORT);
 
-server.listen(port, () => {
+server.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on http://localhost:${port}`);
   console.log(`Socket.IO server also running on http://localhost:${port}`);
 });

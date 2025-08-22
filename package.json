@@ -8,8 +8,9 @@
     "seed:categories": "node src/seed/seedExerciseCategories.js",
     "seed:muscles": "node src/seed/seedMuscles.js",
     "seed:equipment": "node src/seed/seedEquipment.js",
-    "dev": "nodemon src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/backend/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/backend/index.js"
   },
   "keywords": [],
   "author": "",

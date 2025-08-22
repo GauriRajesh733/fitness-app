@@ -7,37 +7,44 @@ import WorkoutCard from "./WorkoutCard";
 import ErrorAlert from "./ErrorAlert";
 import InputDialog from "./InputDialog";
 import SuccessAlert from "./SuccessAlert";
-// connect to backend server
-const socket = io("http://localhost:5001");
-
+import { useRef } from "react";
 const ChatContainer = ({
   senderUsername,
   recipientUsername,
   handleNotification,
   handleError,
 }) => {
+  const s = useRef(null);
   const [showSaveWorkout, setShowSaveWorkout] = useState(false);
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
+  const [workoutNames, setWorkoutNames] = useState([]);
   const [workouts, setWorkouts] = useState([]);
   const [selectedWorkout, setSelectedWorkout] = useState("");
   const [workoutId, setWorkoutId] = useState("");
   const [showWorkouts, setShowWorkouts] = useState(false);
   const [workoutMessageId, setWorkoutMessageId] = useState("");
+  const [workoutMessageName, setWorkoutMessageName] = useState("");
 
   const saveWorkoutMessage = async () => {
+    if (workoutNames.includes(workoutMessageName)) {
+	handleError("Cannot save workout, already have workout with same name");
+        return;
+    }
+
     if (workoutMessageId) {
       try {
         const token = localStorage.getItem("token");
         const data = { workout_id: workoutMessageId };
 
-        await axios.post(`http://localhost:5001/workouts/message`, data, {
+        await axios.post(`/api/workouts/message`, data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
         setWorkoutMessageId("");
+        setWorkoutNames((prevNames) => [...prevNames, workoutMessageName]);
         handleNotification(`Workout from ${recipientUsername} has been saved!`);
       } catch (error) {
         if (!error.message.includes("403") && !error.message.includes("401")) {
@@ -56,7 +63,7 @@ const ChatContainer = ({
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        `http://localhost:5001/workouts?workout_id=${workoutId}`,
+        `/api/workouts?workout_id=${workoutId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -80,7 +87,7 @@ const ChatContainer = ({
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get("http://localhost:5001/workouts", {
+      const response = await axios.get("/api/workouts", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -89,6 +96,9 @@ const ChatContainer = ({
       const savedWorkouts = response.data.reverse();
 
       setWorkouts(savedWorkouts);
+
+      const savedWorkoutNames = savedWorkouts.map((workout) => workout.workout_name);
+      setWorkoutNames(savedWorkoutNames);
     } catch (error) {
       if (!error.message.includes("403") && !error.message.includes("401")) {
         handleError(
@@ -103,18 +113,15 @@ const ChatContainer = ({
   const getChatHistory = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(
-        "http://localhost:5001/users/chat-history",
-        {
-          params: {
-            friendUsername: recipientUsername,
-          },
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get("/api/users/chat-history", {
+        params: {
+          friendUsername: recipientUsername,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       let history = [];
       // all asynchronous fetch calls for workout details
       let workoutPromises = [];
@@ -194,8 +201,30 @@ const ChatContainer = ({
   }, [recipientUsername]);
 
   useEffect(() => {
-    // emit username to server when component mounts
-    socket.emit("user:login", senderUsername);
+
+    if (!senderUsername) {
+      return;
+    }
+
+    if (s.current) {
+      s.current.off();
+      s.current.disconnect();
+      s.current = null;
+    }
+    // connect to backend server
+    const socket = io("/", { path: "/socket.io", transports: ["websocket"], autoConnect: false,});
+    s.current = socket;
+
+    socket.connect();
+
+    socket.on("connect", () => {
+	// emit username to server when there is socket.id
+        socket.emit("user:login", senderUsername);
+    });
+
+    socket.on("connect_error", (err) => {
+	console.error("connection error: ", err.message);
+    });
 
     const handleDisconnect = () => {
       socket.emit("user:disconnect", senderUsername);
@@ -232,6 +261,9 @@ const ChatContainer = ({
       window.removeEventListener("beforeunload", handleDisconnect);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       socket.off("chat message");
+      socket.off("connect");
+      socket.off("connect_error");
+      s.current = null;
     };
   }, [senderUsername]);
 
@@ -246,12 +278,13 @@ const ChatContainer = ({
       };
 
       // send message to server
-      socket.emit("chat message", chatMessage);
+      s.current.emit("chat message", chatMessage);
     }
     setMessage("");
   };
 
   const handleSendWorkout = async () => {
+
     // do not send empty message
     if (selectedWorkout && workoutId) {
       const chatMessage = {
@@ -263,7 +296,7 @@ const ChatContainer = ({
       };
 
       // send message to server
-      socket.emit("chat message", chatMessage);
+      s.current.emit("chat message", chatMessage);
     }
     setWorkoutId("");
     setSelectedWorkout("");
@@ -338,6 +371,7 @@ const ChatContainer = ({
                     workout_id={message.workout_id}
                     handleClick={() => {
                       setShowSaveWorkout(true);
+                      setWorkoutMessageName(message.workout_name);
                       setWorkoutMessageId(message.workout_id);
                     }}
                     color={"#7a8bb2"}
