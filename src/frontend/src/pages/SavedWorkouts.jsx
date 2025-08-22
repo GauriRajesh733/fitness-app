@@ -32,7 +32,7 @@ const SavedWorkouts = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get("http://localhost:5001/workouts", {
+      const response = await axios.get("/api/workouts", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

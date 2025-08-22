@@ -38,7 +38,7 @@ const Messages = () => {
 
     try {
       const response = await axios.get(
-        "http://localhost:5001/users/friend-requests",
+        "/api/users/friend-requests",
         {
           headers: {
             "Content-Type": "application/json",
@@ -66,7 +66,7 @@ const Messages = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await axios.get("http://localhost:5001/users/friends", {
+      const response = await axios.get("/api/users/friends", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -97,7 +97,7 @@ const Messages = () => {
 
     try {
       await axios.post(
-        "http://localhost:5001/users/add-friend",
+        "/api/users/add-friend",
         { friend_username: selectedFriend },
         {
           headers: {
@@ -128,7 +128,7 @@ const Messages = () => {
   async function getSearchedUsers(search) {
     try {
       const response = await axios.get(
-        "http://localhost:5001/users/usernames-like/",
+        "/api/users/usernames-like/",
         {
           params: {
             search: search,

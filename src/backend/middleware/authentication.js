@@ -21,6 +21,7 @@ export async function authenticateToken(req, res, next) {
 }
 
 export async function authenticateUser(req, res, next) {
+  console.log("authenticating user");
   let username = req.body.username;
   let password = req.body.password;
 

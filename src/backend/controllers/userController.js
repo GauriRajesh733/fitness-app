@@ -27,6 +27,7 @@ export async function getChatHistory(req, res) {
     const friendUsername = req.query.friendUsername;
     const chatHistory = await getChatHistoryService(username, friendUsername);
     res.json(chatHistory);
+    console.log('chat history: ', chatHistory);
   } catch (err) {
     console.error("Error in controller getting chat history: ", err);
     res.status(500).json({ error: "Error in controller" });
@@ -38,6 +39,7 @@ export async function getAllFriends(req, res) {
     const username = req.user.username;
     const friends = await getAllFriendsService(username);
     res.json(friends);
+    console.log('got all friends: ', friends);
   } catch (err) {
     console.error("Error in controller getting friends: ", err);
     res.status(500).json({ error: "Error in controller" });
@@ -87,6 +89,7 @@ export async function addFriend(req, res) {
     const friendUsername = req.body.friend_username;
     const newFriend = await addFriendService(username, friendUsername);
     res.json(newFriend);
+    console.log('new friend added!');
   } catch (err) {
     // ignore error if due to user already being friends with given user
     if (err.code != "23505") {
@@ -100,6 +103,7 @@ export async function addFriend(req, res) {
 }
 
 export async function loginUser(req, res) {
+  console.log("logging in user");
   // login user
   const reqUsername = req.body.username;
   const username = { username: reqUsername };
@@ -126,6 +130,7 @@ export async function getFriendRequests(req, res) {
     const username = req.user.username;
     const requests = await getFriendRequestsService(username);
     res.json(requests);
+    console.log('got all friend requests: ', requests);
   } catch (err) {
     console.error("Error in controller getting friend requests: ", err);
     res.status(500).json({ error: "Error in controller" });

@@ -29,7 +29,7 @@ const Landing = () => {
               </div>
             </div>
             <img
-              src="../public/assets/dark_plates.jpg"
+              src="/assets/dark_plates.jpg"
               className="w-full max-w-md object-contain h-auto lg:scale-90"
             />
           </div>
