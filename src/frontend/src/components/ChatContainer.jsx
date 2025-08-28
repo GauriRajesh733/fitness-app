@@ -37,7 +37,7 @@ const ChatContainer = ({
         const token = localStorage.getItem("token");
         const data = { workout_id: workoutMessageId };
 
-        await axios.post(`/api/workouts/message`, data, {
+        await axios.post(`localhost:5001/workouts/message`, data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -63,7 +63,7 @@ const ChatContainer = ({
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        `/api/workouts?workout_id=${workoutId}`,
+        `localhost:5001/workouts?workout_id=${workoutId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -87,7 +87,7 @@ const ChatContainer = ({
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get("/api/workouts", {
+      const response = await axios.get("localhost:5001/workouts", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -113,7 +113,7 @@ const ChatContainer = ({
   const getChatHistory = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("/api/users/chat-history", {
+      const response = await axios.get("localhost:5001/users/chat-history", {
         params: {
           friendUsername: recipientUsername,
         },
