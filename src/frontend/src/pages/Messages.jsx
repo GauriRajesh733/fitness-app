@@ -183,7 +183,7 @@ const Messages = () => {
           onClose={() => setShowSaveConfirmation(false)}
         />
       )}
-      <div className="h-[90vh] flex flex-row">
+      <div className="overflow-hidden h-[90vh] flex flex-row">
         <section className="px-4 py-8  bg-[#cddbf884] text-white flex flex-col w-[30vw]">
           <h1 className="text-[#7a8bb2] text-2xl/7 font-bold sm:text-3xl sm:tracking-tight">
             Messages
@@ -217,7 +217,7 @@ const Messages = () => {
             ))}
           </section>
         </section>
-        <section className="px-4 py-8 flex flex-col bg-[#fbf7ebb9] text-white w-[70vw]">
+        <section className="h-[90vh] px-4 py-8 flex flex-col bg-[#fbf7ebb9] text-white w-[70vw]">
           {showChat && (
             <ChatContainer
               senderUsername={senderUsername}
