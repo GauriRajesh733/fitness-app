@@ -80,9 +80,9 @@ const WorkoutGenerator = () => {
   };
 
   useEffect(() => {
-    fetchOptions("localhost:5001/exercises/muscles", setMuscles);
-    fetchOptions("localhost:5001/exercises/categories", setCategories);
-    fetchOptions("localhost:5001/exercises/equipment", setEquipment);
+    fetchOptions("http://localhost:5001/exercises/muscles", setMuscles);
+    fetchOptions("http://localhost:5001/exercises/categories", setCategories);
+    fetchOptions("http://localhost:5001/exercises/equipment", setEquipment);
   }, []);
 
   useEffect(() => {
@@ -109,7 +109,7 @@ const WorkoutGenerator = () => {
       },
     };
 
-    fetchWorkoutNames("localhost:5001/workouts", setWorkoutNames, auth);
+    fetchWorkoutNames("http://localhost:5001/workouts", setWorkoutNames, auth);
   }, []);
 
   const [selectedMuscles, setSelectedMuscles] = useState([]);
@@ -175,7 +175,7 @@ const WorkoutGenerator = () => {
 
       const params = new URLSearchParams(queryParams);
 
-      const response = await axios.get("localhost:5001/exercises", {
+      const response = await axios.get("http://localhost:5001/exercises", {
         params,
       });
       const shuffledExercises = response.data;
@@ -231,7 +231,7 @@ const WorkoutGenerator = () => {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.post("localhost:5001/workouts", workoutData, {
+      await axios.post("http://localhost:5001/workouts", workoutData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

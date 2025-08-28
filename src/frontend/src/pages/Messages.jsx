@@ -37,12 +37,15 @@ const Messages = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await axios.get("localhost:5001/users/friend-requests", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        "http://localhost:5001/users/friend-requests",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       let loadedRequests = [];
       response.data.map((request) => loadedRequests.push(request.friend));
       setFriendRequests(loadedRequests);
@@ -63,7 +66,7 @@ const Messages = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await axios.get("localhost:5001/users/friends", {
+      const response = await axios.get("http://localhost:5001/users/friends", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -94,7 +97,7 @@ const Messages = () => {
 
     try {
       await axios.post(
-        "localhost:5001/users/add-friend",
+        "http://localhost:5001/users/add-friend",
         { friend_username: selectedFriend },
         {
           headers: {
@@ -124,11 +127,14 @@ const Messages = () => {
 
   async function getSearchedUsers(search) {
     try {
-      const response = await axios.get("localhost:5001/users/usernames-like/", {
-        params: {
-          search: search,
-        },
-      });
+      const response = await axios.get(
+        "http://localhost:5001/users/usernames-like/",
+        {
+          params: {
+            search: search,
+          },
+        }
+      );
       setSearchedUsers(response.data.map((user) => user.username));
       return response.data;
     } catch {
@@ -183,7 +189,7 @@ const Messages = () => {
           onClose={() => setShowSaveConfirmation(false)}
         />
       )}
-      <div className="h-[90vh] flex flex-row">
+      <div className="overflow-hidden h-[90vh] flex flex-row">
         <section className="px-4 py-8  bg-[#cddbf884] text-white flex flex-col w-[30vw]">
           <h1 className="text-[#7a8bb2] text-2xl/7 font-bold sm:text-3xl sm:tracking-tight">
             Messages
@@ -217,7 +223,7 @@ const Messages = () => {
             ))}
           </section>
         </section>
-        <section className="px-4 py-8 flex flex-col bg-[#fbf7ebb9] text-white w-[70vw]">
+        <section className="h-[90vh] px-4 py-8 flex flex-col bg-[#fbf7ebb9] text-white w-[70vw]">
           {showChat && (
             <ChatContainer
               senderUsername={senderUsername}

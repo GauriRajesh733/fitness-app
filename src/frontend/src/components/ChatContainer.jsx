@@ -37,7 +37,7 @@ const ChatContainer = ({
         const token = localStorage.getItem("token");
         const data = { workout_id: workoutMessageId };
 
-        await axios.post(`localhost:5001/workouts/message`, data, {
+        await axios.post(`http://localhost:5001/workouts/message`, data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -63,7 +63,7 @@ const ChatContainer = ({
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        `localhost:5001/workouts?workout_id=${workoutId}`,
+        `http://localhost:5001/workouts?workout_id=${workoutId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -87,7 +87,7 @@ const ChatContainer = ({
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get("localhost:5001/workouts", {
+      const response = await axios.get("http://localhost:5001/workouts", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -113,15 +113,18 @@ const ChatContainer = ({
   const getChatHistory = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("localhost:5001/users/chat-history", {
-        params: {
-          friendUsername: recipientUsername,
-        },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        "http://localhost:5001/users/chat-history",
+        {
+          params: {
+            friendUsername: recipientUsername,
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       let history = [];
       // all asynchronous fetch calls for workout details
       let workoutPromises = [];
@@ -303,9 +306,9 @@ const ChatContainer = ({
   };
 
   return (
-    <div className="h-[90vh] overflow-y-auto ">
-      <div className="flex flex-col h-screen   bg-[#fbf7ebb9] rounded text-white">
-        <section>
+    <div>
+      <div className="flex flex-col bg-[#fbf7ebb9] rounded text-white">
+        <section className="overflow-y-auto h-[75vh] mb-4">
           {chatHistory.map((message, index) => {
             // sent message
             if (message.sent && !message.workout_id) {

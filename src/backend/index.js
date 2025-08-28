@@ -9,9 +9,10 @@ import { createServer } from "http";
 import { getByUsernameService } from "./services/userServices.js";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import cors from "cors";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: join(__dirname,  '.env') });
+dotenv.config({ path: join(__dirname, ".env") });
 
 const app = express();
 const server = createServer(app);
@@ -22,6 +23,18 @@ const users = new Map();
 
 // Middleware
 app.use(express.json());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || origin.includes("http://localhost:5173")) {
+        callback(null, true);
+      } else {
+        callback(new Error("Blocked by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 // Routes
 app.use("/exercises", exerciseRoutes);
@@ -123,7 +136,7 @@ io.on("connection", (socket) => {
 const port = process.env.PORT || 3001;
 console.log("loaded port: ", process.env.PORT);
 
-server.listen(port, '0.0.0.0', () => {
+server.listen(port, "0.0.0.0", () => {
   console.log(`Server is running on http://localhost:${port}`);
   console.log(`Socket.IO server also running on http://localhost:${port}`);
 });
