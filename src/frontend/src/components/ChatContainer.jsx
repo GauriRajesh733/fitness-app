@@ -303,9 +303,9 @@ const ChatContainer = ({
   };
 
   return (
-    <div className="h-[90vh] overflow-y-auto ">
-      <div className="flex flex-col h-screen   bg-[#fbf7ebb9] rounded text-white">
-        <section>
+    <div>
+      <div className="flex flex-col bg-[#fbf7ebb9] rounded text-white">
+        <section className="overflow-y-auto h-[75vh] mb-4">
           {chatHistory.map((message, index) => {
             // sent message
             if (message.sent && !message.workout_id) {
