@@ -91,14 +91,28 @@ WHERE u.name = $1 AND friend.name = $2`;
 }
 
 export async function getFriendRequestsService(username) {
-  let query = `SELECT u.name as friend FROM user_friends uf1 
-LEFT JOIN user_friends uf2 ON uf1.user_id = uf2.friend_id 
-JOIN users u ON u.id = uf1.user_id
-JOIN users friend ON friend.id = uf1.friend_id 
-WHERE friend.name = $1 
-AND uf2.friend_id IS NULL`;
+  console.log('getting friend requests for ', username);
+  const userId = (await getByUsernameService(username)).id;
+
+  let query = `SELECT 
+users.username
+FROM
+user_friends friends_of_user
+RIGHT JOIN
+user_friends friends_with_user
+ON
+friends_of_user.user_id = friends_with_user.friend_id
+AND
+friends_of_user.friend_id = friends_with_user.user_id
+JOIN users
+ON
+friends_with_user.user_id = users.id
+WHERE
+friends_with_user.friend_id = $1 
+AND friends_of_user.friend_id IS NULL;`;
 
   // query database
-  const result = await pool.query(query, [username]);
+  const result = await pool.query(query, [userId]);
+  console.log('query results: ', result.rows);
   return result.rows;
 }

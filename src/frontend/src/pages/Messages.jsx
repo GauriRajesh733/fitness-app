@@ -46,8 +46,9 @@ const Messages = () => {
           },
         }
       );
+      console.log('friend requests data: ', response.data);
       let loadedRequests = [];
-      response.data.map((request) => loadedRequests.push(request.friend));
+      response.data.map((request) => loadedRequests.push(request.username));
       setFriendRequests(loadedRequests);
     } catch (err) {
       if (err.message.includes("403") || err.message.includes("401")) {
