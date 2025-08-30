@@ -37,14 +37,19 @@ const Messages = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await axios.get("localhost:5001/users/friend-requests", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        "/api/users/friend-requests",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log('friend requests data: ', response.data);
+
       let loadedRequests = [];
-      response.data.map((request) => loadedRequests.push(request.friend));
+      response.data.map((request) => loadedRequests.push(request.username));
       setFriendRequests(loadedRequests);
     } catch (err) {
       if (err.message.includes("403") || err.message.includes("401")) {
