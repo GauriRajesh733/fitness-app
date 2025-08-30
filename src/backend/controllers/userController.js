@@ -126,9 +126,17 @@ export async function getUsernamesLike(req, res) {
 }
 
 export async function getFriendRequests(req, res) {
+  console.log('getting friend requests for: ', req.user.username);
   try {
-    const username = req.user.username;
+    const username = req.user?.username;
+    if (!username) {
+       console.error("Missing username to get friend requests.");
+      return res
+        .status(400)
+        .json({ message: "Missing username to get friend requests." });
+    }
     const requests = await getFriendRequestsService(username);
+    console.log('getting friend requests for, ', req.user.username);
     res.json(requests);
     console.log('got all friend requests: ', requests);
   } catch (err) {
