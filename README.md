@@ -1,8 +1,10 @@
 # [Full Stack Workout App](http://34.73.57.107/)
 This simple fitness app lets users create customized workout routines by selecting muscles, equipment, and exercise categories.  Workouts can be saved for later and shared with friends through the live chat feature.
 
+[Workout App](http://34.73.57.107/)
+
 ## Why I Built This
-Having gained some experience with small frontend and backend tickets through clubs, I wanted to challenge myself through this project by creating a fullstack fitness application.  While my goal was initially to gain a better understanding of backend development, refresh my database skills, and learn about working with public APIs, I was also able to gain exposure to other aspects of web development as well.  By deploying this project on Google Cloud, I was also able to learn more about working with Linux and using NGINX as a reverse proxy for security and management purposes.  Although the frontend was not the focus of this project, I was also able to gain a better understanding of component based architecture and state management in React.
+Having gained some experience with frontend and backend tickets through Code4Community and Northeastern Electric Racing, I wanted to challenge myself by creating a fullstack fitness application.  While my goal was initially to gain a better understanding of backend development, refresh my database skills, and learn about working with public APIs, I was also able to gain exposure to other aspects of web development as well.  By deploying this project on Google Cloud, I was also able to learn more about working in Linux environment and using NGINX as a reverse proxy for security and management purposes.  Although the frontend was not the focus of this project, I was also able to gain a better understanding of component based architecture and state management in React.
 
 ## Technical Skills
 <b>Core: </b>JavaScript
@@ -50,7 +52,7 @@ Having gained some experience with small frontend and backend tickets through cl
 
 ## Improvements
 There are definitely several aspects of this project that I would like to improve upon, I have listed a few below.  
-### HTTPS behind NGINX
+### Self-Signed Certificate for HTTPS
 ### Data Processing
 Some of the workout data is in a different language
 <br></br>
