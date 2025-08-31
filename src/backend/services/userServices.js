@@ -5,24 +5,26 @@ export async function getAllUsernamesService() {
   let query = "SELECT JSON_AGG(users.username) as usernames FROM users;";
 
   // query database
-  const result = pool.query(query);
-  return (await result).rows[0];
+  const result = await pool.query(query);
+  return result.rows[0];
 }
 
 export async function getAllFriendsService(username) {
-  let query = `SELECT friend.name as friend FROM user_friends uf1 
+  let query = `SELECT friend.username as username FROM user_friends uf1 
     JOIN user_friends uf2 ON uf1.user_id = uf2.friend_id AND uf1.friend_id = uf2.user_id 
     JOIN users u ON u.id = uf1.user_id
     JOIN users friend ON friend.id = uf1.friend_id 
-    WHERE u.name = $1`;
-
+    WHERE u.username = $1`;
+  if (!username) {
+    console.log('no username provided!');
+  }
   // query database
   const result = await pool.query(query, [username]);
   return result.rows;
 }
 
 export async function getByUsernameService(username) {
-  let query = `SELECT * FROM users WHERE username = $1 LIMIT 1;`;
+  let query = `SELECT * FROM users WHERE username = $1;`;
 
   // query database
   const result = await pool.query(query, [username]);
@@ -30,7 +32,7 @@ export async function getByUsernameService(username) {
   if (result.rows.length < 1) {
     return result.rows;
   }
-
+  console.log('getting user by username: ', username, ' ', result.rows[0]);
   return result.rows[0];
 }
 
@@ -53,17 +55,23 @@ export async function createUserService(name, username, password) {
 }
 
 export async function addFriendService(username, friendUsername) {
-  const userId = (await getByUsernameService(username)).id;
-  const friendId = (await getByUsernameService(friendUsername)).id;
+  try {
+    const userId = (await getByUsernameService(username)).id;
+    const friendId = (await getByUsernameService(friendUsername)).id;
 
-  console.log(username, " ", userId);
-  console.log(friendUsername, " ", friendId);
+    console.log(username, " adding friend ", friendUsername);
+    console.log("user id: ", userId);
+    console.log("friend id: ", friendId);
 
-  const result = await pool.query(
-    `INSERT INTO user_friends (user_id, friend_id) VALUES ($1, $2) RETURNING *;`,
-    [userId, friendId]
-  );
-  return result.rows[0];
+    const result = await pool.query(
+      `INSERT INTO user_friends (user_id, friend_id) VALUES ($1, $2) RETURNING *;`,
+      [userId, friendId]
+    );
+    return result.rows[0];
+  } catch (err) {
+    console.error("Error inside addFriendService:", err);
+    throw err; // Re-throw the error so the controller can handle it
+  }
 }
 
 export async function getChatHistoryService(username, friendUsername) {
@@ -82,7 +90,7 @@ ON
 (m.friend_id = u.id AND m.user_id = friend.id)
 OR 
 (m.user_id = u.id AND m.friend_id = friend.id)
-WHERE u.name = $1 AND friend.name = $2`;
+WHERE u.username = $1 AND friend.username = $2`;
 
   // query database
   const result = await pool.query(query, [username, friendUsername]);
