@@ -49,15 +49,14 @@ Having gained some experience with small frontend and backend tickets through cl
 ![alt text](demo/view_workouts.gif)
 
 ## Improvements
-There are definitely several aspects of this project that I would like to improve upon and learn more about through future projects.  I have listed a few technical improvements below.  
-
+There are definitely several aspects of this project that I would like to improve upon, I have listed a few below.  
+### HTTPS behind NGINX
 ### Data Processing
 Some of the workout data is in a different language
 <br></br>
 Some of the exercise descriptions could be shortened for better user experience
 ### UI Design
 Improve design and mobile responsiveness
-### HTTPS behind NGINX
 ## Future Features
 ![Coming Soon Page](demo/image.png)
 ### Progress Tab 
