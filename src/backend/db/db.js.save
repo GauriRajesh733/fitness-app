@@ -14,8 +14,22 @@ const pool = new Pool({
 
 pool.on("connect", () => {
   console.log("Connection pool established with database");
+console.log('DB CONFIG:', {
+  host: process.env.PGHOST,
+  user: process.env.PGUSER,
+  database: process.env.PGDATABASE,
+  port: process.env.PGPORT,
 });
 
+// Test the connection immediately
+pool.query('SELECT current_database() as current_db, current_user as current_user, NOW() as current_time')
+  .then(result => {
+    console.log('CONNECTED TO DATABASE:', result.rows[0]);
+  })
+  .catch(err => {
+    console.error('DB CONNECTION ERROR:', err);
+  });
+});
 console.log('DB connection created at:', new Date());
 console.log('Connection pool status:', pool.totalCount, pool.idleCount);
 

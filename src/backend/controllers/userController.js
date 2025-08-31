@@ -89,16 +89,16 @@ export async function addFriend(req, res) {
     const friendUsername = req.body.friend_username;
     const newFriend = await addFriendService(username, friendUsername);
     res.json(newFriend);
-    console.log('new friend added!');
+    console.log("new friend added!");
   } catch (err) {
     // ignore error if due to user already being friends with given user
-    if (err.code != "23505") {
-      console.error("An error occurred: ", err);
-      return res.status(500).json({ error: "An error occurred" });
+    if (err.code == "23505") {
+      return res
+        .status(200)
+        .json({ message: "Current user already friends with given user." });
     }
-    res
-      .status(200)
-      .json({ message: "Current user already friends with given user." });
+    console.error("An error occurred: ", err);
+    return res.status(500).json({ error: "An error occurred" });
   }
 }
 

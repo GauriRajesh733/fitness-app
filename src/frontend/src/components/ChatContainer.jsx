@@ -54,6 +54,7 @@ const ChatContainer = ({
         } else {
           handleError("Please login or create an account to view messages.");
         }
+        console.log(error);
       }
     }
   };
@@ -80,6 +81,7 @@ const ChatContainer = ({
       } else {
         handleError("Please login or create an account to view messages.");
       }
+      console.log(error);
     }
   };
 
@@ -107,6 +109,7 @@ const ChatContainer = ({
       } else {
         handleError("Please login or create an account to view messages.");
       }
+      console.log(error);
     }
   };
 
@@ -186,6 +189,7 @@ const ChatContainer = ({
       } else {
         handleError("Please login or create an account to view messages.");
       }
+      console.log(error);
     }
   };
 
@@ -198,6 +202,7 @@ const ChatContainer = ({
     setChatHistory([]);
     getChatHistory();
     setShowSaveWorkout(false);
+    console.log(recipientUsername, ' is current messages');
   }, [recipientUsername]);
 
   useEffect(() => {
