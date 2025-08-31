@@ -59,7 +59,7 @@ Some of the exercise descriptions could be shortened for better user experience
 Improve design and mobile responsiveness
 ### HTTPS behind NGINX
 ## Future Features
-![Coming Soon Page](image.png)
+![Coming Soon Page](demo/image.png)
 ### Progress Tab 
 Stay consistent by scheduling workouts and tracking completion
 <br></br>
