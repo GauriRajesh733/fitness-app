@@ -59,10 +59,14 @@ io.on("connection", (socket) => {
       workoutId,
     }) => {
       try {
+        console.log('message from ', senderUsername, ' to ', recipientUsername);
         // get id of sender
         const senderId = (await getByUsernameService(senderUsername)).id;
+        console.log("sender id: ", senderId);
         // get id of reciever
         const recieverId = (await getByUsernameService(recipientUsername)).id;
+        console.log("reciever id: ", recieverId);
+
 
         // db query
         let query =

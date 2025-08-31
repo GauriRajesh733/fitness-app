@@ -78,7 +78,7 @@ const Messages = () => {
 
       response.data.map((friend) => {
         loadedFriends.push({
-          username: friend.friend,
+          username: friend.username,
         });
       });
 
@@ -110,9 +110,11 @@ const Messages = () => {
       );
       setShowSaveConfirmation(true);
       setShowSearch(false);
-      setSelectedFriend("");
-      getFriends();
-      getFriendRequests();
+      setTimeout(() => {
+          getFriends();
+          getFriendRequests();
+          getFriendRequests();
+    }, 500);
     } catch (err) {
       setShowSearch(false);
       if (err.message.includes("403") || err.message.includes("401")) {
