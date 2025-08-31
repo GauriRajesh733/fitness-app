@@ -47,7 +47,7 @@ const Messages = () => {
         }
       );
       let loadedRequests = [];
-      response.data.map((request) => loadedRequests.push(request.friend));
+      response.data.map((request) => loadedRequests.push(request.username));
       setFriendRequests(loadedRequests);
     } catch (err) {
       if (err.message.includes("403") || err.message.includes("401")) {
@@ -76,7 +76,7 @@ const Messages = () => {
 
       response.data.map((friend) => {
         loadedFriends.push({
-          username: friend.friend,
+          username: friend.username,
         });
       });
 

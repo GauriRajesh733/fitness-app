@@ -10,11 +10,11 @@ export async function getAllUsernamesService() {
 }
 
 export async function getAllFriendsService(username) {
-  let query = `SELECT friend.name as friend FROM user_friends uf1 
+  let query = `SELECT friend.username as friend FROM user_friends uf1 
     JOIN user_friends uf2 ON uf1.user_id = uf2.friend_id AND uf1.friend_id = uf2.user_id 
     JOIN users u ON u.id = uf1.user_id
     JOIN users friend ON friend.id = uf1.friend_id 
-    WHERE u.name = $1`;
+    WHERE u.username = $1`;
 
   // query database
   const result = await pool.query(query, [username]);
@@ -82,7 +82,7 @@ ON
 (m.friend_id = u.id AND m.user_id = friend.id)
 OR 
 (m.user_id = u.id AND m.friend_id = friend.id)
-WHERE u.name = $1 AND friend.name = $2`;
+WHERE u.username = $1 AND friend = $2`;
 
   // query database
   const result = await pool.query(query, [username, friendUsername]);
