@@ -26,27 +26,27 @@ Having gained some experience with small frontend and backend tickets through cl
 ## Features
 
 ### Create an Account
-![alt text](account_creation.mp4.gif)
+![alt text](demo/account_creation.mp4.gif)
 
 ### Generate Custom Workouts
-![alt text](workout_generator.gif)
+![alt text](demo/workout_generator.gif)
 
 ### Send Messages and Share Workouts
 
 #### Send Friend Requests
-![alt text](friend_request.gif)
+![alt text](demo/friend_request.gif)
 
 #### Accept Friend Requests
-![alt text](add_friend.gif)
+![alt text](demo/add_friend.gif)
 
 #### Chat in Real-Time and Share Workouts
-![alt text](sending_messages.gif)
+![alt text](demo/sending_messages.gif)
 
 #### Save Shared Workouts
-![alt text](save_shared_workouts.gif)
+![alt text](demo/save_shared_workouts.gif)
 
 ### View Created Workouts
-![alt text](view_workouts.gif)
+![alt text](demo/view_workouts.gif)
 
 ## Improvements
 There are definitely several aspects of this project that I would like to improve upon and learn more about through future projects.  I have listed a few technical improvements below.  
