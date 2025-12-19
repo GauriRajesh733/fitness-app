@@ -21,9 +21,9 @@ Having gained some experience with frontend and backend tickets through Code4Com
 
 <b>Testing: </b>Postman, curl
 
-<b>Deployment: </b>Google Cloud, Linux, NGINX, pm2
+<b>Deployment:</b> Linux VM (AWS EC2), NGINX, pm2  
 
-
+<b>Cloud:</b> Google Cloud Platform (initial), AWS EC2 (current)
 
 ## Features
 
