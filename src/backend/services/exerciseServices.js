@@ -1,5 +1,12 @@
 import pool from "../db/db.js";
 import fsPromises from "fs/promises";
+import { readFile } from "fs/promises";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 export async function getExercisesService({
   equipment: allEquipment,
@@ -30,7 +37,7 @@ export async function getExercisesService({
   let query = "";
   try {
     query += await fsPromises.readFile(
-      "src/backend/db/filteredExercises.sql",
+      path.join(__dirname, "../db/filteredExercises.sql"),
       "utf-8"
     );
   } catch (err) {

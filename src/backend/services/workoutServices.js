@@ -2,10 +2,18 @@ import pool from "../db/db.js";
 import fsPromises from "fs/promises";
 import { getByUsernameService } from "./userServices.js";
 import { getExerciseByNameService } from "./exerciseServices.js";
+import { readFile } from "fs/promises";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
 export async function getAllWorkoutsService(username, queryParams) {
   let query = "";
   try {
-    query += await fsPromises.readFile("src/backend/db/workouts.sql", "utf-8");
+    query += await fsPromises.readFile(path.join(__dirname, "../db/workouts.sql"), "utf-8");
   } catch (err) {
     console.error("Error reading file", err);
   }
@@ -22,7 +30,6 @@ export async function getAllWorkoutsService(username, queryParams) {
     query += " WHERE u.id = $1 GROUP BY w.id, u.id;";
     result = pool.query(query, [user.id]);
   }
-
   // query database
   return (await result).rows;
 }
