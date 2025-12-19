@@ -16,25 +16,18 @@ dotenv.config({ path: join(__dirname, ".env") });
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server, { path: "/socket.io" });
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+  },
+});
 
 // Online Users
 const users = new Map();
 
 // Middleware
 app.use(express.json());
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || origin.includes("http://localhost:5173")) {
-        callback(null, true);
-      } else {
-        callback(new Error("Blocked by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+app.use(cors({ origin: "http://localhost:5173" }));
 
 // Routes
 app.use("/exercises", exerciseRoutes);
@@ -72,10 +65,13 @@ io.on("connection", (socket) => {
       workoutId,
     }) => {
       try {
+        console.log("message from ", senderUsername, " to ", recipientUsername);
         // get id of sender
         const senderId = (await getByUsernameService(senderUsername)).id;
+        console.log("sender id: ", senderId);
         // get id of reciever
         const recieverId = (await getByUsernameService(recipientUsername)).id;
+        console.log("reciever id: ", recieverId);
 
         // db query
         let query =
@@ -134,7 +130,6 @@ io.on("connection", (socket) => {
 });
 
 const port = process.env.PORT || 3001;
-console.log("loaded port: ", process.env.PORT);
 
 server.listen(port, "0.0.0.0", () => {
   console.log(`Server is running on http://localhost:${port}`);
